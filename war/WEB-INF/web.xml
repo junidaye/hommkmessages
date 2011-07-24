@@ -7,34 +7,25 @@
   
   <!-- Servlets -->
   <servlet>
-    <servlet-name>mailboxServlet</servlet-name>
-    <servlet-class>com.appspot.hommkmail.server.MailboxServiceImpl</servlet-class>
+    <servlet-name>addMessageServlet</servlet-name>
+    <servlet-class>com.appspot.hommkmessage.server.AddMessageServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>addMailServlet</servlet-name>
-    <servlet-class>com.appspot.hommkmail.server.AddMailServlet</servlet-class>
+    <servlet-name>singleMessageServlet</servlet-name>
+    <servlet-class>com.appspot.hommkmessage.server.SingleMessageServlet</servlet-class>
   </servlet>
-  <servlet>
-    <servlet-name>singleMailServlet</servlet-name>
-    <servlet-class>com.appspot.hommkmail.server.SingleMailServlet</servlet-class>
-  </servlet>
-  
   <servlet-mapping>
-    <servlet-name>mailboxServlet</servlet-name>
-    <url-pattern>/hommk_mail/mailbox</url-pattern>
+    <servlet-name>addMessageServlet</servlet-name>
+    <url-pattern>/hommk_message/post</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>addMailServlet</servlet-name>
-    <url-pattern>/hommk_mail/post</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>singleMailServlet</servlet-name>
-    <url-pattern>/hommk_mail/mail</url-pattern>
+    <servlet-name>singleMessageServlet</servlet-name>
+    <url-pattern>/hommk_message/message</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->
   <welcome-file-list>
-    <welcome-file>Hommk_mail.html</welcome-file>
+    <welcome-file>Hommk_message.html</welcome-file>
   </welcome-file-list>
 
 </web-app>
