@@ -1,8 +1,7 @@
-package com.appspot.hommkmail.client;
+package com.appspot.hommkmessage.client;
 
-import com.appspot.hommkmail.shared.FieldVerifier;
+import com.appspot.hommkmessage.shared.FieldVerifier;
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -19,7 +18,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class Hommk_mail implements EntryPoint {
+public class Hommk_message implements EntryPoint {
 	/**
 	 * The message displayed to the user when the server cannot be reached or
 	 * returns an error.
@@ -32,8 +31,8 @@ public class Hommk_mail implements EntryPoint {
 	 * Create a remote service proxy to talk to the server-side Greeting
 	 * service.
 	 */
-	private final MailboxServiceAsync mailboxService = GWT
-			.create(MailboxService.class);
+	// private final MessagesServiceAsync messageListService = GWT
+	// .create(MessagesService.class);
 
 	/**
 	 * This is the entry point method.
@@ -70,13 +69,13 @@ public class Hommk_mail implements EntryPoint {
 		dialogVPanel.add(new HTML("<b>Sending name to the server:</b>"));
 		dialogVPanel.add(textToServerLabel);
 		dialogVPanel.add(new HTML("<br><b>Server replies:</b>"));
-		final MailFrame mailFrame = new MailFrame();
-		dialogVPanel.add(mailFrame);
 
 		// dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
 		// dialogBox.setWidget(dialogVPanel);
 		// dialogBox.setModal(false);
 		RootPanel.get("nameFieldContainer").add(dialogVPanel);
+		final ListView listView = new ListView();
+		RootPanel.get("nameFieldContainer").add(listView);
 
 		// Create a handler for the sendButton and nameField
 		class MyHandler implements ClickHandler, KeyUpHandler {
@@ -113,7 +112,7 @@ public class Hommk_mail implements EntryPoint {
 
 				// Then, we send the input to the server.
 				textToServerLabel.setText(textToServer);
-				mailFrame.showMail("2");
+				listView.refresh();
 			}
 		}
 

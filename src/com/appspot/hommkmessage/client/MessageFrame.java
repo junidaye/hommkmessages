@@ -1,13 +1,13 @@
-package com.appspot.hommkmail.client;
+package com.appspot.hommkmessage.client;
 
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.user.client.ui.Frame;
 
-public class MailFrame extends Frame {
+public class MessageFrame extends Frame {
 
-	public MailFrame() {
-		getElement().setId("mailFrame");
+	public MessageFrame() {
+		getElement().setId("messageFrame");
 		addLoadHandler(new LoadHandler() {
 
 			@Override
@@ -17,15 +17,15 @@ public class MailFrame extends Frame {
 				 * .getElement(); // .getPropertyJSO( "contentWindow"); //
 				 * .getItem(0); String width = contentWindow.getScrollWidth() +
 				 * "px"; String height = contentWindow.getScrollHeight() + "px";
-				 * mailFrame.setSize(width, height);
+				 * message.setSize(width, height);
 				 */
-				resizeMailFrame();
+				resizeMessageFrame();
 			}
 		});
 	}
 
-	private native void resizeMailFrame() /*-{
-		var id = 'mailFrame';
+	private native void resizeMessageFrame() /*-{
+		var id = 'messageFrame';
 		var newheight = $wnd.document.getElementById(id).contentWindow.document.body.scrollHeight;
 		var newwidth = $wnd.document.getElementById(id).contentWindow.document.body.scrollWidth;
 
@@ -33,7 +33,7 @@ public class MailFrame extends Frame {
 		$wnd.document.getElementById(id).width = (newwidth) + "px";
 	}-*/;
 
-	public void showMail(String mailId) {
-		setUrl("/hommk_mail/mail?mailId=" + mailId);
+	public void showMessage(String messageId) {
+		setUrl("/hommk_message/message?messageId=" + messageId);
 	}
 }

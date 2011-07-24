@@ -1,4 +1,4 @@
-package com.appspot.hommkmail.shared;
+package com.appspot.hommkmessage.shared;
 
 /**
  * <p>
