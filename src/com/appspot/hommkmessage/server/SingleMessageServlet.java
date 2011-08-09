@@ -26,17 +26,14 @@ public class SingleMessageServlet extends HttpServlet {
 
 	private String getMessageSource(String messageId, Locale locale) {
 		Message message = new RepositoryAccess().get(messageId);
-		String sourceFromRepo = message.getHtmlSource();
+		String sourceFromRepo = message.getUncompressedHtmlSource();
 		String info = "<div>Creation Date: "
 				+ message.getCreationDateFormatted(locale) + "</div>";
 		return addWrapping(info + sourceFromRepo);
 	}
 
-	private String addWrapping(String sourceFromRepo) {
-		String result = "<html>" + sourceFromRepo + "</html>";
-		// TODO next : hier nicht mehr html nehmen, sondern ein iframe
-		// das hat als "src" eine URL, die eine Mail/Kampfbericht und nichts
-		// anderes zurückgibt
+	private String addWrapping(String incompleteHtmlCode) {
+		String result = "<html>" + incompleteHtmlCode + "</html>";
 		return result;
 	}
 }

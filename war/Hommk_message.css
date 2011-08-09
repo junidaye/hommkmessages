@@ -23,11 +23,7 @@ h1 {
   */
 }
 
-.dialogVPanel {
-  margin: 5px;
-}
-
-.serverResponseLabelError {
+.serverResponseError {
   color: red;
 }
 
@@ -35,3 +31,25 @@ h1 {
 #closeButton {
   margin: 15px 6px 6px;
 }
+
+#searchLineContainer {
+  margin-left: auto;
+  margin-right: auto;
+  display: table;
+}
+
+#listViewContainer {
+  margin-top: 12px;
+  margin-left: auto;
+  margin-right: auto;
+  display: table;
+}
+
+.messageInListView {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+a {
+  outline: 0; /* prevent ugly borders in DisclosurePanel */
+} 

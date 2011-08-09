@@ -14,6 +14,11 @@
     <servlet-name>singleMessageServlet</servlet-name>
     <servlet-class>com.appspot.hommkmessage.server.SingleMessageServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>messagesServlet</servlet-name>
+    <servlet-class>com.appspot.hommkmessage.server.MessagesServiceImpl</servlet-class>
+  </servlet>
+  
   <servlet-mapping>
     <servlet-name>addMessageServlet</servlet-name>
     <url-pattern>/hommk_message/post</url-pattern>
@@ -21,6 +26,10 @@
   <servlet-mapping>
     <servlet-name>singleMessageServlet</servlet-name>
     <url-pattern>/hommk_message/message</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>messagesServlet</servlet-name>
+    <url-pattern>/hommk_message/messages</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->
