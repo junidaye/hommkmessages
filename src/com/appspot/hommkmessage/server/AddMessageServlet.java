@@ -16,12 +16,30 @@ public class AddMessageServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		String htmlSource = req.getParameter("source");
-		Message message = new Message(htmlSource);
+		String key = req.getParameter("key");
+		String subjectText = req.getParameter("subjectText");
+		String dateText = req.getParameter("dateText");
+		String receiverText = req.getParameter("receiverText");
+		String contentText = req.getParameter("contentText");
+		validateParameters(htmlSource, key, subjectText, dateText,
+				receiverText, contentText);
+		Message message = new Message(htmlSource, key, subjectText, dateText,
+				receiverText, contentText);
 		new RepositoryAccess().save(message);
 
 		String newMessageUrl = req.getContextPath() + "message?messageId="
 				+ message.getId();
 		resp.sendRedirect(newMessageUrl);
+	}
+
+	private void validateParameters(String htmlSource, String key,
+			String subjectText, String dateText, String receiverText,
+			String contentText) {
+		if (htmlSource == null || key == null || subjectText == null
+				|| dateText == null || receiverText == null
+				|| contentText == null) {
+			throw new IllegalArgumentException("missing parameter");
+		}
 	}
 
 }
