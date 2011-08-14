@@ -17,6 +17,7 @@ public class RepositoryAccess {
 				.getPersistenceManager();
 		try {
 			persistenceManager.makePersistent(message);
+			persistenceManager.flush();
 		} finally {
 			persistenceManager.close();
 		}
