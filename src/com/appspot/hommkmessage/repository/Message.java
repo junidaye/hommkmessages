@@ -2,7 +2,9 @@ package com.appspot.hommkmessage.repository;
 
 import java.nio.charset.Charset;
 import java.text.DateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -16,6 +18,7 @@ import org.dellroad.lzma.client.LZMAByteArrayCompressor;
 import org.dellroad.lzma.client.LZMAByteArrayDecompressor;
 
 import com.appspot.hommkmessage.shared.MessageMetadata;
+import com.appspot.hommkmessage.shared.MessageType;
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Text;
 
@@ -30,8 +33,10 @@ public class Message {
 	private Blob htmlSource;
 	private Date creationDate;
 	private String password;
-	private Text headerText;
 	private Text contentText;
+	private String subject;
+	private String dateText;
+	private Text receiverText;
 
 	private Message() {
 		// used by JDO
@@ -39,7 +44,9 @@ public class Message {
 
 	public Message(String htmlSource, String key, String subjectText,
 			String dateText, String receiverText, String contentText) {
-		this.headerText = new Text(subjectText + dateText + receiverText);
+		this.subject = subjectText;
+		this.dateText = dateText;
+		this.receiverText = new Text(receiverText);
 		this.contentText = new Text(contentText);
 		this.setPassword(password);
 		this.htmlSource = compress(htmlSource);
@@ -97,30 +104,28 @@ public class Message {
 		MessageMetadata messageMetadata = new MessageMetadata();
 		messageMetadata.setId(getId());
 		messageMetadata.setCreationDate(getCreationDate());
-		messageMetadata.setMessageHeaderText(getType() + headerText.getValue());
+		MessageType messageType = MessageType
+				.readTypeOfMessageHtml(getUncompressedHtmlSource());
+		messageMetadata.setMessageType(messageType);
+		messageMetadata.setSubjectText(subject);
+		messageMetadata.setMessageDateText(dateText);
+		messageMetadata.setReceiverText(receiverText.getValue());
 		return messageMetadata;
 	}
 
-	private String getType() {
-		String html = getUncompressedHtmlSource();
-		if (html.contains("BattleResultDetail")) {
-			return "[Kampf]";
-		}
-		if (html.contains("ScoutingResultDetail")) {
-			return "[Spionage]";
-		}
-		// TODO PROBLEM::: es werden alte nachrichten gecacht und IN NEUEN
-		// gespeichert --> meherere nachrichten in einer !!!
-		return "";
-	}
-
 	public boolean matchesSearchText(String searchStringLowerCase) {
-		return match(headerText, searchStringLowerCase)
-				|| match(contentText, searchStringLowerCase);
+		List<String> interestingTexts = Arrays.asList(receiverText.getValue(),
+				subject, dateText, contentText.getValue());
+		for (String text : interestingTexts) {
+			if (matches(text, searchStringLowerCase)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
-	private boolean match(Text text, String searchStringLowerCase) {
-		return text.getValue().toLowerCase().contains(searchStringLowerCase);
+	private boolean matches(String text, String searchStringLowerCase) {
+		return text.toLowerCase().contains(searchStringLowerCase);
 	}
 
 }

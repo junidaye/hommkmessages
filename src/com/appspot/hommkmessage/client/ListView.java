@@ -5,22 +5,33 @@ import java.util.List;
 import com.appspot.hommkmessage.shared.DateFormatter;
 import com.appspot.hommkmessage.shared.MessageMetadata;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.DisclosurePanel;
+import com.google.gwt.user.client.ui.DisclosurePanelImages;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class ListView extends VerticalPanel {
 	private final MessagesServiceAsync messagesService = GWT
 			.create(MessagesService.class);
+	private final DisclosurePanelImages images = (DisclosurePanelImages) GWT
+			.create(DisclosurePanelImages.class);
 
 	private final DateFormatter dateFormatter;
 	private String searchString = "";
+	private final LocalStorage localStorage;
 
-	public ListView(DateFormatter dateFormatter) {
+	public ListView(DateFormatter dateFormatter, LocalStorage localStorage) {
 		this.dateFormatter = dateFormatter;
+		this.localStorage = localStorage;
 	}
 
 	public void refresh() {
@@ -56,8 +67,8 @@ public class ListView extends VerticalPanel {
 
 	private void createListEntry(final int index,
 			final MessageMetadata messageMetadata) {
-		String header = messageMetadata.getInfoLine(dateFormatter);
-		final DisclosurePanel entryPanel = new DisclosurePanel(header);
+		final DisclosurePanel entryPanel = new DisclosurePanel();
+		setEntryHeader(messageMetadata, entryPanel, true);
 		add(entryPanel);
 
 		entryPanel.addOpenHandler(new OpenHandler<DisclosurePanel>() {
@@ -70,8 +81,32 @@ public class ListView extends VerticalPanel {
 				messageFrame.addStyleName("messageInListView");
 				entryPanel.add(messageFrame);
 				messageFrame.showMessage(messageMetadata.getId());
+				localStorage.markAsRead(messageMetadata.getId());
+
+				setEntryHeader(messageMetadata, entryPanel, false);
+			}
+
+		});
+		entryPanel.addCloseHandler(new CloseHandler<DisclosurePanel>() {
+
+			@Override
+			public void onClose(CloseEvent<DisclosurePanel> event) {
+				setEntryHeader(messageMetadata, entryPanel, true);
 			}
 		});
+	}
+
+	private void setEntryHeader(final MessageMetadata messageMetadata,
+			final DisclosurePanel entryPanel, boolean entryClosed) {
+		HTML header = messageMetadata.getInfoLine(dateFormatter,
+				localStorage);
+		Panel entryHeaderPanel = new HorizontalPanel();
+		AbstractImagePrototype imagePrototype = entryClosed ? images
+				.disclosurePanelClosed() : images.disclosurePanelOpen();
+		Image image = imagePrototype.createImage();
+		entryHeaderPanel.add(image);
+		entryHeaderPanel.add(header);
+		entryPanel.setHeader(entryHeaderPanel);
 	}
 
 	public String getSearchString() {

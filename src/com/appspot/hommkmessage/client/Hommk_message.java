@@ -62,7 +62,8 @@ public class Hommk_message implements EntryPoint {
 				new HTML("<b>Nachrichten sortiert nach Upload-Datum:</b>"));
 
 		DateFormatter dateFormatter = new DateFormatter();
-		final ListView listView = new ListView(dateFormatter);
+		LocalStorage localStorage = new LocalStorage();
+		final ListView listView = new ListView(dateFormatter, localStorage);
 		RootPanel.get("listViewContainer").add(listView);
 
 		class SubmitSearchHandler implements ClickHandler, KeyUpHandler {

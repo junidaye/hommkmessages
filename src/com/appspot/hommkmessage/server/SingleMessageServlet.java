@@ -27,9 +27,7 @@ public class SingleMessageServlet extends HttpServlet {
 	private String getMessageSource(String messageId, Locale locale) {
 		Message message = new RepositoryAccess().get(messageId);
 		String sourceFromRepo = message.getUncompressedHtmlSource();
-		String info = "<div>Creation Date: "
-				+ message.getCreationDateFormatted(locale) + "</div>";
-		return addWrapping(info + sourceFromRepo);
+		return addWrapping(sourceFromRepo);
 	}
 
 	private String addWrapping(String incompleteHtmlCode) {

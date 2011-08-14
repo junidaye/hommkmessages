@@ -15,14 +15,6 @@ h1 {
   font-size: 16pt;
 }
 
-/** Most GWT widgets already have a style name defined */
-.gwt-DialogBox {
-	/*
-  width: 750px;
-  height: 550px;
-  */
-}
-
 .serverResponseError {
   color: red;
 }
@@ -52,4 +44,22 @@ h1 {
 
 a {
   outline: 0; /* prevent ugly borders in DisclosurePanel */
-} 
+}
+
+.messageListEntryTypeIcon {
+  height: 0.8em;
+  margin-left: 4px;
+  margin-right: 13px;
+}
+
+.messageListEntryUploadDate {
+	color: black;
+}
+
+.messageListEntrySubjectUnread {
+	color: #073;
+}
+
+.messageListEntrySecondLine {
+	color: grey;
+}
