@@ -6,8 +6,8 @@ function submitMessage(key, serviceUrl){
 	var dateText = getMessageElementByClass('messageHeaderSubject').parentNode.textContent.replace(subjectText, '');
 	var receiverText = getMessageElementByClass('messageHeaderReceivers').textContent;
 	
-	var messageCode = messageBoxHeaderElement.outerHTML;
-	messageCode += messageBoxContentElement.outerHTML;
+	var messageCode = outerHTML(messageBoxHeaderElement);
+	messageCode += outerHTML(messageBoxContentElement);
 	messageCode = removeHiddenChildrenOfNodeInHtml(messageBoxContentElement, messageCode);
 	var code = css + messageCode;
 	code = code.replace(/"/g, '&quot;');
@@ -39,17 +39,38 @@ function getMessageElementByClass(className) {
 }
 
 function removeHiddenChildrenOfNodeInHtml(parent, html) {
+//	alert('start-html-- ' +parent);
+	alert('start-html-- ' +html);
 	var children = parent.getElementsByClassName("hidden");
 	for (var i in children) {
-		html = html.replace(children[i].outerHTML, '');
+//	alert('start-html-- ' +html);
+		if (children[i].nodeType == 1) {
+			html = html.replace(outerHTML(children[i]), '');
+		}
 	}
 	return html;
 }
 
 function removeHiddenChildrenOfNodeInContentText(parent, text) {
 	var children = parent.getElementsByClassName("hidden");
+	alert('start-- ' +text);
 	for (var i in children) {
-		html = html.replace(children[i].contentText, '');
+		if (children[i].nodeType == 1) {
+			text = text.replace(children[i].textContent, '');
+		}
 	}
-	return html;
+//		alert('c');
+//	alert('ende-- ' +text);
+	return text;
 }
+function outerHTML(node){
+    // IE and Chrome have their own method
+  return node.outerHTML || (
+      function(n){
+          var div = document.createElement('div'), h;
+          div.appendChild( n.cloneNode(true) );
+          h = div.innerHTML;
+          div = null;
+          return h;
+      })(node);
+  }
