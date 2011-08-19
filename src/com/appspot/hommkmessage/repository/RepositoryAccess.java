@@ -9,8 +9,14 @@ import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 
 public class RepositoryAccess {
-	PersistenceManagerFactory persistenceManagerFactory = PersistenceManagerFactorySingleton.INSTANCE
+
+	private final PersistenceManagerFactory persistenceManagerFactory = PersistenceManagerFactorySingleton.INSTANCE
 			.get();
+	private final String password;
+
+	public RepositoryAccess(String key) {
+		this.password = key;
+	}
 
 	public void save(Message message) {
 		PersistenceManager persistenceManager = persistenceManagerFactory
@@ -44,11 +50,14 @@ public class RepositoryAccess {
 	public List<Message> getMessages(String searchString) {
 		PersistenceManager persistenceManager = persistenceManagerFactory
 				.getPersistenceManager();
-		Query query = persistenceManager.newQuery("SELECT FROM "
-				+ Message.class.getName() + " ORDER BY creationDate DESC");
+		Query query = persistenceManager
+				.newQuery("SELECT FROM "
+						+ Message.class.getName()
+						+ " WHERE password == accessPassword ORDER BY creationDate DESC");
+		query.declareParameters("java.lang.String accessPassword");
 		try {
 			List<Message> result = new ArrayList<Message>(
-					(List<Message>) query.execute());
+					(List<Message>) query.execute(password));
 			filter(result, searchString);
 			return result;
 		} finally {

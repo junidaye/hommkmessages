@@ -28,16 +28,19 @@ public class ListView extends VerticalPanel {
 	private final DateFormatter dateFormatter;
 	private String searchString = "";
 	private final LocalStorage localStorage;
+	private final String password;
 
-	public ListView(DateFormatter dateFormatter, LocalStorage localStorage) {
+	public ListView(DateFormatter dateFormatter, LocalStorage localStorage,
+			String password) {
 		this.dateFormatter = dateFormatter;
 		this.localStorage = localStorage;
+		this.password = password;
 	}
 
 	public void refresh() {
 		clear();
-		messagesService
-				.getMessageMetadata(getSearchString(), refreshCallback());
+		messagesService.getMessageMetadata(getSearchString(), password,
+				refreshCallback());
 	}
 
 	private AsyncCallback<List<MessageMetadata>> refreshCallback() {
@@ -98,8 +101,7 @@ public class ListView extends VerticalPanel {
 
 	private void setEntryHeader(final MessageMetadata messageMetadata,
 			final DisclosurePanel entryPanel, boolean entryClosed) {
-		HTML header = messageMetadata.getInfoLine(dateFormatter,
-				localStorage);
+		HTML header = messageMetadata.getInfoLine(dateFormatter, localStorage);
 		Panel entryHeaderPanel = new HorizontalPanel();
 		AbstractImagePrototype imagePrototype = entryClosed ? images
 				.disclosurePanelClosed() : images.disclosurePanelOpen();

@@ -9,5 +9,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("messages")
 public interface MessagesService extends RemoteService {
 
-	List<MessageMetadata> getMessageMetadata(String searchString);
+	List<MessageMetadata> getMessageMetadata(String searchString,
+			String password);
 }

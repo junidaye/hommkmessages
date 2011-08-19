@@ -25,7 +25,8 @@ public class SingleMessageServlet extends HttpServlet {
 	}
 
 	private String getMessageSource(String messageId, Locale locale) {
-		Message message = new RepositoryAccess().get(messageId);
+		Message message = new RepositoryAccess("no_password_necessary_yet")
+				.get(messageId);
 		String sourceFromRepo = message.getUncompressedHtmlSource();
 		return addWrapping(sourceFromRepo);
 	}

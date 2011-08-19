@@ -7,7 +7,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface MessagesServiceAsync {
 
-	void getMessageMetadata(String searchString,
+	void getMessageMetadata(String searchString, String password,
 			AsyncCallback<List<MessageMetadata>> asyncCallback);
 
 }

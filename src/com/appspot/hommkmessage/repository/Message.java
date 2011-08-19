@@ -37,18 +37,21 @@ public class Message {
 	private String subject;
 	private String dateText;
 	private Text receiverText;
+	private String userId;
 
 	private Message() {
 		// used by JDO
 	}
 
 	public Message(String htmlSource, String key, String subjectText,
-			String dateText, String receiverText, String contentText) {
+			String dateText, String receiverText, String contentText,
+			String userId) {
 		this.subject = subjectText;
 		this.dateText = dateText;
+		this.userId = userId;
 		this.receiverText = new Text(receiverText);
 		this.contentText = new Text(contentText);
-		this.setPassword(password);
+		this.password = key;
 		this.htmlSource = compress(htmlSource);
 		id = UUID.randomUUID().toString();
 		creationDate = new Date();
