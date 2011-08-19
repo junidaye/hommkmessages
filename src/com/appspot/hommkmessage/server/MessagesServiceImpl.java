@@ -13,8 +13,9 @@ public class MessagesServiceImpl extends RemoteServiceServlet implements
 		MessagesService {
 
 	@Override
-	public List<MessageMetadata> getMessageMetadata(String searchString) {
-		List<Message> messages = new RepositoryAccess()
+	public List<MessageMetadata> getMessageMetadata(String searchString,
+			String password) {
+		List<Message> messages = new RepositoryAccess(password)
 				.getMessages(searchString);
 		List<MessageMetadata> metadataList = new ArrayList<MessageMetadata>();
 		for (Message message : messages) {

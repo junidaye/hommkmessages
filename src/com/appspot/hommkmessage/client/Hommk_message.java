@@ -7,6 +7,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -63,7 +64,10 @@ public class Hommk_message implements EntryPoint {
 
 		DateFormatter dateFormatter = new DateFormatter();
 		LocalStorage localStorage = new LocalStorage();
-		final ListView listView = new ListView(dateFormatter, localStorage);
+		String password = Window.Location.getParameter("key");
+		validateParameters(password);
+		final ListView listView = new ListView(dateFormatter, localStorage,
+				password);
 		RootPanel.get("listViewContainer").add(listView);
 
 		class SubmitSearchHandler implements ClickHandler, KeyUpHandler {
@@ -93,5 +97,12 @@ public class Hommk_message implements EntryPoint {
 		searchTextField.addKeyUpHandler(handler);
 
 		handler.submitSearch();
+	}
+
+	private void validateParameters(String password) {
+		if (password == null) {
+			throw new IllegalArgumentException("parameter key is not set");
+		}
+
 	}
 }

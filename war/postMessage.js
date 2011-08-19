@@ -23,6 +23,7 @@ function submitMessage(key, serviceUrl){
 	newSource += createHiddenField("dateText", dateText); 
 	newSource += createHiddenField("receiverText", receiverText); 
 	newSource += createHiddenField("contentText", contentText);
+	newSource += createHiddenField("userId", getUserId());
 	newSource += '</form>';
 	newWindow.document.charset=document.charset;
 	newWindow.document.body.innerHTML += newSource;
@@ -39,11 +40,8 @@ function getMessageElementByClass(className) {
 }
 
 function removeHiddenChildrenOfNodeInHtml(parent, html) {
-//	alert('start-html-- ' +parent);
-	alert('start-html-- ' +html);
 	var children = parent.getElementsByClassName("hidden");
 	for (var i in children) {
-//	alert('start-html-- ' +html);
 		if (children[i].nodeType == 1) {
 			html = html.replace(outerHTML(children[i]), '');
 		}
@@ -53,24 +51,35 @@ function removeHiddenChildrenOfNodeInHtml(parent, html) {
 
 function removeHiddenChildrenOfNodeInContentText(parent, text) {
 	var children = parent.getElementsByClassName("hidden");
-	alert('start-- ' +text);
 	for (var i in children) {
 		if (children[i].nodeType == 1) {
 			text = text.replace(children[i].textContent, '');
 		}
 	}
-//		alert('c');
-//	alert('ende-- ' +text);
 	return text;
 }
 function outerHTML(node){
-    // IE and Chrome have their own method
-  return node.outerHTML || (
-      function(n){
-          var div = document.createElement('div'), h;
-          div.appendChild( n.cloneNode(true) );
-          h = div.innerHTML;
-          div = null;
-          return h;
-      })(node);
-  }
+	// IE and Chrome have their own method
+	return node.outerHTML || (
+		function(n){
+			var div = document.createElement('div'), h;
+			div.appendChild( n.cloneNode(true) );
+			h = div.innerHTML;
+			div = null;
+			return h;
+		}
+	)(node);
+}
+
+function getUserId() {
+	if (!localStorage.userId) {
+		localStorage.userId = guid();
+	}
+	return localStorage.userId;
+}
+function S4() {
+	   return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+}
+function guid() {
+   return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+}

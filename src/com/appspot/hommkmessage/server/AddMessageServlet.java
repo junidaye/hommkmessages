@@ -21,11 +21,12 @@ public class AddMessageServlet extends HttpServlet {
 		String dateText = req.getParameter("dateText");
 		String receiverText = req.getParameter("receiverText");
 		String contentText = req.getParameter("contentText");
+		String userId = req.getParameter("userId");
 		validateParameters(htmlSource, key, subjectText, dateText,
-				receiverText, contentText);
+				receiverText, contentText, userId);
 		Message message = new Message(htmlSource, key, subjectText, dateText,
-				receiverText, contentText);
-		new RepositoryAccess().save(message);
+				receiverText, contentText, userId);
+		new RepositoryAccess(key).save(message);
 
 		String newMessageUrl = req.getContextPath() + "message?messageId="
 				+ message.getId();
@@ -34,10 +35,10 @@ public class AddMessageServlet extends HttpServlet {
 
 	private void validateParameters(String htmlSource, String key,
 			String subjectText, String dateText, String receiverText,
-			String contentText) {
+			String contentText, String userId) {
 		if (htmlSource == null || key == null || subjectText == null
 				|| dateText == null || receiverText == null
-				|| contentText == null) {
+				|| contentText == null || userId == null) {
 			throw new IllegalArgumentException("missing parameter");
 		}
 	}
