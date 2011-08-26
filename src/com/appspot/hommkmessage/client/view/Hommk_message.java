@@ -3,100 +3,58 @@ package com.appspot.hommkmessage.client.view;
 import com.appspot.hommkmessage.client.LocalStorage;
 import com.appspot.hommkmessage.shared.DateFormatter;
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 
-/**
- * Entry point classes define <code>onModuleLoad()</code>.
- */
 public class Hommk_message implements EntryPoint {
 
-	/**
-	 * Create a remote service proxy to talk to the server-side Greeting
-	 * service.
-	 */
-	// private final MessagesServiceAsync messageListService = GWT
-	// .create(MessagesService.class);
-
-	/**
-	 * This is the entry point method.
-	 */
 	@Override
 	public void onModuleLoad() {
-		final Button sendButton = new Button("Suche");
-		final TextBox searchTextField = new TextBox();
-		searchTextField.setText("");
-		searchTextField.setFocus(true);
-		final Label errorLabel = new Label();
-		RootPanel.get("errorLabelContainer").add(errorLabel);
-
-		// We can add style names to widgets
-		sendButton.addStyleName("sendButton");
-
-		// Add the nameField and sendButton to the RootPanel
-		// Use RootPanel.get() to get the entire body element
-		HorizontalPanel searchPanel = new HorizontalPanel();
-		searchPanel.add(searchTextField);
-		searchPanel.add(sendButton);
-		RootPanel.get("searchLineContainer").add(searchPanel);
-
-		// dialogBox.setAnimationEnabled(true);
-		// We can set the id of a widget by accessing its Element
-
-		RootPanel.get("listViewContainer").add(
-				new HTML("<b>Nachrichten sortiert nach Upload-Datum:</b>"));
-
-		DateFormatter dateFormatter = new DateFormatter();
-		LocalStorage localStorage = new LocalStorage();
 		String password = Window.Location.getParameter("key");
 		validateParameters(password);
-		final ListView listView = new ListView(dateFormatter, localStorage,
-				password);
-		RootPanel.get("listViewContainer").add(listView);
 
-		class SubmitSearchHandler implements ClickHandler, KeyUpHandler {
-			@Override
-			public void onClick(ClickEvent event) {
-				submitSearch();
-			}
+		final ListView listView = createListView(password);
 
-			@Override
-			public void onKeyUp(KeyUpEvent event) {
-				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-					submitSearch();
-				}
-			}
-
-			private void submitSearch() {
-				errorLabel.setText("");
-
-				listView.setSearchString(searchTextField.getText());
-				listView.refresh();
-			}
-		}
-
-		// Add a handler to send the name to the server
-		SubmitSearchHandler handler = new SubmitSearchHandler();
-		sendButton.addClickHandler(handler);
-		searchTextField.addKeyUpHandler(handler);
-
-		handler.submitSearch();
+		SearchHandler search = initSearch(listView);
+		search.submitSearch();
 	}
 
 	private void validateParameters(String password) {
 		if (password == null) {
 			throw new IllegalArgumentException("parameter key is not set");
 		}
+	}
 
+	private ListView createListView(String password) {
+		RootPanel.get("listViewContainer").add(
+				new HTML("<b>Nachrichten sortiert nach Upload-Datum:</b>"));
+
+		DateFormatter dateFormatter = new DateFormatter();
+		LocalStorage localStorage = new LocalStorage();
+		final ListView listView = new ListView(dateFormatter, localStorage,
+				password);
+		RootPanel.get("listViewContainer").add(listView);
+		return listView;
+	}
+
+	private SearchHandler initSearch(final ListView listView) {
+		final Button searchButton = new Button("Suche");
+		final TextBox searchTextField = new TextBox();
+		searchTextField.setText("");
+		searchTextField.setFocus(true);
+		searchButton.addStyleName("sendButton");
+		HorizontalPanel searchPanel = new HorizontalPanel();
+		searchPanel.add(searchTextField);
+		searchPanel.add(searchButton);
+		RootPanel.get("searchLineContainer").add(searchPanel);
+
+		SearchHandler handler = new SearchHandler(listView, searchTextField);
+		searchButton.addClickHandler(handler);
+		searchTextField.addKeyUpHandler(handler);
+		return handler;
 	}
 }

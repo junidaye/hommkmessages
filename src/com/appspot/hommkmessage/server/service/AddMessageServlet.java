@@ -1,4 +1,4 @@
-package com.appspot.hommkmessage.server;
+package com.appspot.hommkmessage.server.service;
 
 import java.io.IOException;
 
@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.appspot.hommkmessage.repository.Message;
-import com.appspot.hommkmessage.repository.RepositoryAccess;
+import com.appspot.hommkmessage.server.repository.Message;
+import com.appspot.hommkmessage.server.repository.RepositoryAccess;
 
 public class AddMessageServlet extends HttpServlet {
 

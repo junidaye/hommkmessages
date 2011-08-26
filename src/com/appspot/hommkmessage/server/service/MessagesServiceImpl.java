@@ -1,11 +1,11 @@
-package com.appspot.hommkmessage.server;
+package com.appspot.hommkmessage.server.service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.appspot.hommkmessage.client.service.MessagesService;
-import com.appspot.hommkmessage.repository.Message;
-import com.appspot.hommkmessage.repository.RepositoryAccess;
+import com.appspot.hommkmessage.server.repository.Message;
+import com.appspot.hommkmessage.server.repository.RepositoryAccess;
 import com.appspot.hommkmessage.shared.MessageMetadata;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 

@@ -1,4 +1,4 @@
-package com.appspot.hommkmessage.repository;
+package com.appspot.hommkmessage.server.repository;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManagerFactory;
