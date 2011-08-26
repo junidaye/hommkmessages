@@ -1,4 +1,4 @@
-package com.appspot.hommkmessage.repository;
+package com.appspot.hommkmessage.server.repository;
 
 import java.util.ArrayList;
 import java.util.Iterator;

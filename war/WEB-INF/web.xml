@@ -8,15 +8,15 @@
   <!-- Servlets -->
   <servlet>
     <servlet-name>addMessageServlet</servlet-name>
-    <servlet-class>com.appspot.hommkmessage.server.AddMessageServlet</servlet-class>
+    <servlet-class>com.appspot.hommkmessage.server.service.AddMessageServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>singleMessageServlet</servlet-name>
-    <servlet-class>com.appspot.hommkmessage.server.SingleMessageServlet</servlet-class>
+    <servlet-class>com.appspot.hommkmessage.server.service.SingleMessageServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>messagesServlet</servlet-name>
-    <servlet-class>com.appspot.hommkmessage.server.MessagesServiceImpl</servlet-class>
+    <servlet-class>com.appspot.hommkmessage.server.service.MessagesServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
