@@ -10,10 +10,10 @@ function submitMessage(key, serviceUrl){
 	messageCode += outerHTML(messageBoxContentElement);
 	messageCode = removeHiddenChildrenOfNodeInHtml(messageBoxContentElement, messageCode);
 	var code = css + messageCode;
+	code = code.replace(/&quot;/g, '&amp;quot;');
 	code = code.replace(/"/g, '&quot;');
 	var headerText = messageBoxHeaderElement.textContent;
-	var contentText = messageBoxContentElement.textContent;
-	contentText = removeHiddenChildrenOfNodeInContentText(messageBoxContentElement, contentText);
+	var contentText = removeHiddenChildrenOfNodeInContentText(messageBoxContentElement);
 	
 	var newWindow = window.open("", "_blank"); 
 	var newSource = '<form id="tmpForm" action="'+serviceUrl+'" method="post">';
@@ -49,11 +49,12 @@ function removeHiddenChildrenOfNodeInHtml(parent, html) {
 	return html;
 }
 
-function removeHiddenChildrenOfNodeInContentText(parent, text) {
-	var children = parent.getElementsByClassName("hidden");
+function removeHiddenChildrenOfNodeInContentText(parent) {
+	var text = '';
+	var children = parent.childNodes;
 	for (var i in children) {
-		if (children[i].nodeType == 1) {
-			text = text.replace(children[i].textContent, '');
+		if (children[i].nodeType == 1 && !children[i].getAttribute("class").contains("hidden")) {
+			text += children[i].textContent;
 		}
 	}
 	return text;
