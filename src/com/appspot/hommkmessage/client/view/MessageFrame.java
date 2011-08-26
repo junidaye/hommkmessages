@@ -1,4 +1,4 @@
-package com.appspot.hommkmessage.client;
+package com.appspot.hommkmessage.client.view;
 
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;

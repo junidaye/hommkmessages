@@ -1,4 +1,4 @@
-package com.appspot.hommkmessage.client;
+package com.appspot.hommkmessage.client.service;
 
 import java.util.List;
 
