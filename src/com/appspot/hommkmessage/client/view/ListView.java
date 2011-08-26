@@ -1,7 +1,10 @@
-package com.appspot.hommkmessage.client;
+package com.appspot.hommkmessage.client.view;
 
 import java.util.List;
 
+import com.appspot.hommkmessage.client.LocalStorage;
+import com.appspot.hommkmessage.client.service.MessagesService;
+import com.appspot.hommkmessage.client.service.MessagesServiceAsync;
 import com.appspot.hommkmessage.shared.DateFormatter;
 import com.appspot.hommkmessage.shared.MessageMetadata;
 import com.google.gwt.core.client.GWT;
