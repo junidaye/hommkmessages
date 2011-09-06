@@ -6,6 +6,7 @@ function submitMessage(key, serviceUrl){
 	var dateText = getMessageElementByClass('messageHeaderSubject').parentNode.textContent.replace(subjectText, '');
 	var receiverText = getMessageElementByClass('messageHeaderReceivers').textContent;
 	
+	var elementsWithAddedTitle = addSpyReportTooltips(messageBoxContentElement);
 	var messageCode = outerHTML(messageBoxHeaderElement);
 	messageCode += outerHTML(messageBoxContentElement);
 	messageCode = removeHiddenChildrenOfNodeInHtml(messageBoxContentElement, messageCode);
@@ -16,18 +17,23 @@ function submitMessage(key, serviceUrl){
 	var contentText = removeHiddenChildrenOfNodeInContentText(messageBoxContentElement);
 	
 	var newWindow = window.open("", "_blank"); 
-	var newSource = '<form id="tmpForm" action="'+serviceUrl+'" method="post">';
-	newSource += createHiddenField("source", code); 
-	newSource += createHiddenField("key", key); 
-	newSource += createHiddenField("subjectText", subjectText); 
-	newSource += createHiddenField("dateText", dateText); 
-	newSource += createHiddenField("receiverText", receiverText); 
-	newSource += createHiddenField("contentText", contentText);
-	newSource += createHiddenField("userId", getUserId());
-	newSource += '</form>';
-	newWindow.document.charset=document.charset;
-	newWindow.document.body.innerHTML += newSource;
-	newWindow.document.getElementById("tmpForm").submit();
+	if (newWindow == null) {
+		alert("Please disable popup blockers for this website and try again.");
+	} else {
+		var newSource = '<form id="tmpForm" action="'+serviceUrl+'" method="post">';
+		newSource += createHiddenField("source", code); 
+		newSource += createHiddenField("key", key); 
+		newSource += createHiddenField("subjectText", subjectText); 
+		newSource += createHiddenField("dateText", dateText); 
+		newSource += createHiddenField("receiverText", receiverText); 
+		newSource += createHiddenField("contentText", contentText);
+		newSource += createHiddenField("userId", getUserId());
+		newSource += '</form>';
+		newWindow.document.charset=document.charset;
+		newWindow.document.body.innerHTML += newSource;
+		newWindow.document.getElementById("tmpForm").submit();
+	}
+	cleanUpTitles(elementsWithAddedTitle);
 }
 
 function createHiddenField(name, value) {
@@ -58,6 +64,33 @@ function removeHiddenChildrenOfNodeInContentText(parent) {
 		}
 	}
 	return text;
+}
+function addSpyReportTooltips(messageElement) {
+	var heroDivs = messageElement.getElementsByClassName("hero");
+	var elementsWithAddedTitle = new Array();
+	for (var i in heroDivs) {
+	  var heroDiv = heroDivs[i];
+	  if (heroDiv.parentElement && heroDiv.parentElement.parentElement && heroDiv.parentElement.parentElement.className.contains("hidden") || typeof heroDiv.tagName === 'undefined' || heroDiv.tagName.toLowerCase() !== "div") {
+	    continue;
+	  }
+	  var heroId = heroDiv.getElementsByTagName("div")[0].getAttribute("heroid");
+	  var heroContent = HOMMK.elementPool.obj.ScoutingResultHero.get(heroId).content;
+	  var attack = typeof heroContent.attack === 'undefined' ? "?" : heroContent.attack;
+	  var defense = typeof heroContent.defense === 'undefined' ? "?" : heroContent.defense;
+	  var magic = typeof heroContent.magic === 'undefined' ? "?" : heroContent.magic;
+	  var level = typeof heroContent._level === 'undefined' ? "?" : heroContent._level;
+	  var title = HOMMK.HEROTRAINING_CARAC_LEVEL_TEXT + ": " + level;
+	  title += "   \n";
+	  title += HOMMK.HEROTRAINING_CARAC_ATTACK_TEXT + ": " + attack + "   \n" + HOMMK.HEROTRAINING_CARAC_DEFENSE_TEXT + ": " + defense + "   \n" + HOMMK.HEROTRAINING_CARAC_MAGIC_TEXT + ": " + magic;
+	  heroDiv.getElementsByTagName("div")[0].title = title;
+	  elementsWithAddedTitle.push(heroDiv.getElementsByTagName("div")[0]);
+	}
+	return elementsWithAddedTitle;
+}
+function cleanUpTitles(elementsWithAddedTitle) {
+	for (var i in elementsWithAddedTitle) {
+		elementsWithAddedTitle[i].title = '';
+	}
 }
 function outerHTML(node){
 	// IE and Chrome have their own method
