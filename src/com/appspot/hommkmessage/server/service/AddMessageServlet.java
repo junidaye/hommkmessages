@@ -1,6 +1,7 @@
 package com.appspot.hommkmessage.server.service;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -24,13 +25,10 @@ public class AddMessageServlet extends HttpServlet {
 		String userId = req.getParameter("userId");
 		validateParameters(htmlSource, key, subjectText, dateText,
 				receiverText, contentText, userId);
-		Message message = new Message(htmlSource, key, subjectText, dateText,
+		Message message = saveMessage(htmlSource, key, subjectText, dateText,
 				receiverText, contentText, userId);
-		new RepositoryAccess(key).save(message);
 
-		String newMessageUrl = req.getContextPath() + "message?messageId="
-				+ message.getId();
-		resp.sendRedirect(newMessageUrl);
+		writeResponse(req, resp, userId, message);
 	}
 
 	private void validateParameters(String htmlSource, String key,
@@ -41,6 +39,29 @@ public class AddMessageServlet extends HttpServlet {
 				|| contentText == null || userId == null) {
 			throw new IllegalArgumentException("missing parameter");
 		}
+	}
+
+	private Message saveMessage(String htmlSource, String key,
+			String subjectText, String dateText, String receiverText,
+			String contentText, String userId) {
+		Message message = new Message(htmlSource, key, subjectText, dateText,
+				receiverText, contentText, userId);
+		new RepositoryAccess(key).save(message);
+		return message;
+	}
+
+	private void writeResponse(HttpServletRequest req,
+			HttpServletResponse resp, String userId, Message message)
+			throws IOException {
+		String newMessageUrl = req.getContextPath() + "message?messageId="
+				+ message.getId();
+		PrintWriter writer = resp.getWriter();
+		writer.append("<html><head><script type='text/javascript'>");
+		writer.append("localStorage.userId='" + userId + "';");
+		writer.append("window.location.href='" + newMessageUrl + "';");
+		writer.append("</script></head></html>");
+		writer.flush();
+		writer.close();
 	}
 
 }

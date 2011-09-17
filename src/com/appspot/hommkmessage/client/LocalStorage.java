@@ -30,4 +30,11 @@ public class LocalStorage {
 		return storage == null;
 	}
 
+	public String getUserId() {
+		if (notSupported()) {
+			return null;
+		}
+		return storage.getItem("userId");
+	}
+
 }

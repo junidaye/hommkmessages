@@ -8,10 +8,13 @@ import com.appspot.hommkmessage.client.service.MessagesServiceAsync;
 import com.appspot.hommkmessage.shared.DateFormatter;
 import com.appspot.hommkmessage.shared.MessageMetadata;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.DisclosurePanel;
@@ -20,6 +23,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.SubmitButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class ListView extends VerticalPanel {
@@ -32,17 +36,21 @@ public class ListView extends VerticalPanel {
 	private String searchString = "";
 	private final LocalStorage localStorage;
 	private final String password;
+	private final String userId;
 
 	public ListView(DateFormatter dateFormatter, LocalStorage localStorage,
 			String password) {
 		this.dateFormatter = dateFormatter;
 		this.localStorage = localStorage;
 		this.password = password;
+		this.userId = localStorage.getUserId(); // TODO PROBLEM!! die userid
+												// liegt unter der offiziellen
+												// hommk url
 	}
 
 	public void refresh() {
 		clear();
-		messagesService.getMessageMetadata(getSearchString(), password,
+		messagesService.getMessageMetadata(getSearchString(), password, userId,
 				refreshCallback());
 	}
 
@@ -73,9 +81,13 @@ public class ListView extends VerticalPanel {
 
 	private void createListEntry(final int index,
 			final MessageMetadata messageMetadata) {
+		final HorizontalPanel entryLinePanel = new HorizontalPanel();
 		final DisclosurePanel entryPanel = new DisclosurePanel();
+		entryPanel.addStyleName("messageListEntryPanel");
 		setEntryHeader(messageMetadata, entryPanel, true);
-		add(entryPanel);
+		entryLinePanel.add(entryPanel);
+		addDeleteLink(messageMetadata, entryLinePanel);
+		add(entryLinePanel);
 
 		entryPanel.addOpenHandler(new OpenHandler<DisclosurePanel>() {
 
@@ -112,6 +124,42 @@ public class ListView extends VerticalPanel {
 		entryHeaderPanel.add(image);
 		entryHeaderPanel.add(header);
 		entryPanel.setHeader(entryHeaderPanel);
+	}
+
+	private void addDeleteLink(final MessageMetadata messageMetadata,
+			final Panel parent) {
+		if (!messageMetadata.isAllowedToBeDeleted()) {
+			return;
+		}
+		SubmitButton button = new SubmitButton(
+				"<img src=\"images/cross_hand_drawn_linda_k_01_rotated.svg\" class=\"messageListEntryOptionIcon\" />");
+		button.addStyleName("messageListEntryOptionButton");
+		button.setTitle("Löschen");
+		button.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				if (!Window.confirm("Nachricht wirklich löschen?")) {
+					return;
+				}
+				messagesService.deleteMessage(messageMetadata.getId(),
+						localStorage.getUserId(), new AsyncCallback<Void>() {
+
+							@Override
+							public void onSuccess(Void result) {
+								parent.setVisible(false);
+							}
+
+							@Override
+							public void onFailure(Throwable caught) {
+								// if problems occur, add error message in the
+								// future
+
+							}
+						});
+			}
+		});
+		parent.add(button);
 	}
 
 	public String getSearchString() {

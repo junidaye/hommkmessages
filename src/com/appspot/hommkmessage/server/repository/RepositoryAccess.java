@@ -75,4 +75,20 @@ public class RepositoryAccess {
 		}
 	}
 
+	public void deleteMessage(String messageId, String userId) {
+		Message message = get(messageId);
+		if (!message.getUserId().equals(userId)) {
+			throw new IllegalArgumentException("Access denied");
+		}
+		PersistenceManager persistenceManager = persistenceManagerFactory
+				.getPersistenceManager();
+		try {
+			persistenceManager.makePersistent(message);
+			persistenceManager.deletePersistent(message);
+			persistenceManager.flush();
+		} finally {
+			persistenceManager.close();
+		}
+	}
+
 }

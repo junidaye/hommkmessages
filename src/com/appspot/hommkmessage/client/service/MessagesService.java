@@ -10,5 +10,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface MessagesService extends RemoteService {
 
 	List<MessageMetadata> getMessageMetadata(String searchString,
-			String password);
+			String password, String forUserId);
+
+	void deleteMessage(String messageId, String userId);
 }
