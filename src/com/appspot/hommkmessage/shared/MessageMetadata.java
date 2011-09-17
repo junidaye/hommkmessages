@@ -17,6 +17,7 @@ public class MessageMetadata implements Serializable {
 	private String subjectText;
 	private String messageDateText;
 	private String receiverText;
+	private boolean allowedToBeDeleted;
 
 	public String getId() {
 		return id;
@@ -74,6 +75,14 @@ public class MessageMetadata implements Serializable {
 
 	public void setReceiverText(String receiverText) {
 		this.receiverText = receiverText;
+	}
+
+	public boolean isAllowedToBeDeleted() {
+		return this.allowedToBeDeleted;
+	}
+
+	public void setAllowedToBeDeleted(boolean allowedToBeDeleted) {
+		this.allowedToBeDeleted = allowedToBeDeleted;
 	}
 
 }

@@ -8,6 +8,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface MessagesServiceAsync {
 
 	void getMessageMetadata(String searchString, String password,
-			AsyncCallback<List<MessageMetadata>> asyncCallback);
+			String forUserId, AsyncCallback<List<MessageMetadata>> asyncCallback);
+
+	void deleteMessage(String messageId, String userId,
+			AsyncCallback<Void> callback);
 
 }

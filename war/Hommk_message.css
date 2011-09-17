@@ -52,6 +52,22 @@ a {
   margin-right: 13px;
 }
 
+.messageListEntryOptionIcon {
+  height: 0.8em;
+  margin-left: 7px;
+  margin-right: 7px;
+}
+
+.messageListEntryOptionButton {
+  border: none;
+  background: transparent;
+  cursor: hand;
+}
+  
+.messageListEntryPanel {
+  margin-right: 10px;
+}
+
 .messageListEntryUploadDate {
 	color: black;
 }
