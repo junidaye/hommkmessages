@@ -8,10 +8,16 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 
+import net.sf.jsr107cache.Cache;
+
+import com.appspot.hommkmessage.shared.MessageMetadata;
+
 public class RepositoryAccess {
 
 	private final PersistenceManagerFactory persistenceManagerFactory = PersistenceManagerFactorySingleton.INSTANCE
-			.get();
+			.getFactory();
+	private final Cache cache = CacheSingleton.INSTANCE.getCache();
+
 	private final String password;
 
 	public RepositoryAccess(String key) {
@@ -19,6 +25,7 @@ public class RepositoryAccess {
 	}
 
 	public void save(Message message) {
+		cache.remove(password);
 		PersistenceManager persistenceManager = persistenceManagerFactory
 				.getPersistenceManager();
 		try {
@@ -47,7 +54,25 @@ public class RepositoryAccess {
 		}
 	}
 
-	public List<Message> getMessages(String searchString) {
+	public List<MessageMetadata> getMessagesMetadata(String searchString,
+			String forUserId) {
+		List<MessageMetadata> metadataList;
+		if (cache.containsKey(password)) {
+			metadataList = (List<MessageMetadata>) cache.get(password);
+		} else {
+			List<Message> messages = getMessages(searchString);
+			metadataList = new ArrayList<MessageMetadata>();
+			for (Message message : messages) {
+				MessageMetadata messageMetadata = message
+						.getMetadata(forUserId);
+				metadataList.add(messageMetadata);
+			}
+			cache.put(password, metadataList);
+		}
+		return metadataList;
+	}
+
+	private List<Message> getMessages(String searchString) {
 		PersistenceManager persistenceManager = persistenceManagerFactory
 				.getPersistenceManager();
 		Query query = persistenceManager
@@ -80,6 +105,7 @@ public class RepositoryAccess {
 		if (!message.getUserId().equals(userId)) {
 			throw new IllegalArgumentException("Access denied");
 		}
+		cache.remove(password);
 		PersistenceManager persistenceManager = persistenceManagerFactory
 				.getPersistenceManager();
 		try {
