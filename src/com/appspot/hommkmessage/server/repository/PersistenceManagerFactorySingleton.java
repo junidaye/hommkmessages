@@ -6,10 +6,11 @@ import javax.jdo.PersistenceManagerFactory;
 public enum PersistenceManagerFactorySingleton {
 	INSTANCE;
 
-	private final PersistenceManagerFactory persistenceManagerFactory = JDOHelper
+	private final PersistenceManagerFactory factory = JDOHelper
 			.getPersistenceManagerFactory("transactions-optional");
 
-	public PersistenceManagerFactory get() {
-		return persistenceManagerFactory;
+	public PersistenceManagerFactory getFactory() {
+		return factory;
 	}
+
 }
