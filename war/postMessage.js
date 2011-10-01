@@ -32,6 +32,7 @@ function submitMessage(key, serviceUrl){
 	var headerText = messageBoxHeaderElement.textContent;
 	var contentText = removeHiddenChildrenOfNodeInContentText(messageBoxContentElement);
 	contentText = contentText.replace(/"/g, '&quot;');
+	subjectText = subjectText.replace(/"/g, '&quot;');
 	
 	var newWindow = window.open("", "_blank"); 
 	if (newWindow == null) {
