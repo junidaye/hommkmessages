@@ -17,7 +17,9 @@
 package com.appspot.hommkmessage.shared;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import com.appspot.hommkmessage.client.LocalStorage;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -33,6 +35,7 @@ public class MessageMetadata implements Serializable {
 	private String subjectText;
 	private String messageDateText;
 	private String receiverText;
+	private String contentText;
 	private boolean allowedToBeDeleted;
 
 	public String getId() {
@@ -99,6 +102,25 @@ public class MessageMetadata implements Serializable {
 
 	public void setAllowedToBeDeleted(boolean allowedToBeDeleted) {
 		this.allowedToBeDeleted = allowedToBeDeleted;
+	}
+
+	public void setContentText(String contentText) {
+		this.contentText = contentText;
+	}
+
+	public boolean matchesSearchText(String searchStringLowerCase) {
+		List<String> interestingTexts = Arrays.asList(receiverText,
+				subjectText, messageDateText, contentText);
+		for (String text : interestingTexts) {
+			if (matches(text, searchStringLowerCase)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean matches(String text, String searchStringLowerCase) {
+		return text.toLowerCase().contains(searchStringLowerCase);
 	}
 
 }

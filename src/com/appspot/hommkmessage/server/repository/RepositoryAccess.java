@@ -72,19 +72,19 @@ public class RepositoryAccess {
 
 	public List<MessageMetadata> getMessagesMetadata(String searchString,
 			String forUserId) {
-		List<MessageMetadata> metadataList;
+		List<MessageMetadata> metadataList = new ArrayList<MessageMetadata>();
 		if (cache.containsKey(password)) {
-			metadataList = (List<MessageMetadata>) cache.get(password);
+			metadataList.addAll((List<MessageMetadata>) cache.get(password));
 		} else {
 			List<Message> messages = getMessages(searchString);
-			metadataList = new ArrayList<MessageMetadata>();
 			for (Message message : messages) {
 				MessageMetadata messageMetadata = message
 						.getMetadata(forUserId);
 				metadataList.add(messageMetadata);
 			}
-			cache.put(password, metadataList);
+			cache.put(password, new ArrayList<MessageMetadata>(metadataList));
 		}
+		filter(metadataList, searchString);
 		return metadataList;
 	}
 
@@ -97,19 +97,17 @@ public class RepositoryAccess {
 						+ " WHERE password == accessPassword ORDER BY creationDate DESC");
 		query.declareParameters("java.lang.String accessPassword");
 		try {
-			List<Message> result = new ArrayList<Message>(
+			return new ArrayList<Message>(
 					(List<Message>) query.execute(password));
-			filter(result, searchString);
-			return result;
 		} finally {
 			persistenceManager.close();
 		}
 	}
 
-	private void filter(List<Message> messages, String searchString) {
+	private void filter(List<MessageMetadata> messages, String searchString) {
 		String searchStringLowerCase = searchString.toLowerCase();
-		for (Iterator<Message> it = messages.iterator(); it.hasNext();) {
-			Message message = it.next();
+		for (Iterator<MessageMetadata> it = messages.iterator(); it.hasNext();) {
+			MessageMetadata message = it.next();
 			if (!message.matchesSearchText(searchStringLowerCase)) {
 				it.remove();
 			}
