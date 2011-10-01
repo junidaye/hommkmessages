@@ -1,0 +1,4 @@
+Currently hommkmessage is configured for use in Google's AppEngine. 
+The easiest way to do this is via the Eclipse AppEngine plug-in.
+
+When installing your own instance, please remember to replace all hardcoded URLs with your own URLs.
