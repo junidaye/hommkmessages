@@ -18,9 +18,7 @@ package com.appspot.hommkmessage.server.repository;
 
 import java.nio.charset.Charset;
 import java.text.DateFormat;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -133,24 +131,10 @@ public class Message {
 		messageMetadata.setSubjectText(subject);
 		messageMetadata.setMessageDateText(dateText);
 		messageMetadata.setReceiverText(receiverText.getValue());
+		messageMetadata.setContentText(contentText.getValue());
 		messageMetadata.setAllowedToBeDeleted(this.userId != null
 				&& this.userId.equals(forUserId));
 		return messageMetadata;
-	}
-
-	public boolean matchesSearchText(String searchStringLowerCase) {
-		List<String> interestingTexts = Arrays.asList(receiverText.getValue(),
-				subject, dateText, contentText.getValue());
-		for (String text : interestingTexts) {
-			if (matches(text, searchStringLowerCase)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private boolean matches(String text, String searchStringLowerCase) {
-		return text.toLowerCase().contains(searchStringLowerCase);
 	}
 
 }

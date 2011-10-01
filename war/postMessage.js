@@ -1,3 +1,19 @@
+/*-------------------------------------------------------------------------------
+# This file is part of hommkmessage.
+# 
+# hommkmessage is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# hommkmessage is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+# 
+# You should have received a copy of the GNU Affero General Public License
+# along with hommkmessage.  If not, see <http://www.gnu.org/licenses/>.
+-------------------------------------------------------------------------------*/
 function submitMessage(key, serviceUrl){
 	var css = '<head><link rel="stylesheet" type="text/css" href="http://static5.cdn.ubi.com/u/HOMMK/mightandmagicheroeskingdoms.ubi.com/1.5.0.90-2-MTR/css/prod.css" /></head>';
 	var messageBoxHeaderElement = getMessageElementByClass('messageBoxFrameMessageHeader');
@@ -15,6 +31,7 @@ function submitMessage(key, serviceUrl){
 	code = code.replace(/"/g, '&quot;');
 	var headerText = messageBoxHeaderElement.textContent;
 	var contentText = removeHiddenChildrenOfNodeInContentText(messageBoxContentElement);
+	contentText = contentText.replace(/"/g, '&quot;');
 	
 	var newWindow = window.open("", "_blank"); 
 	if (newWindow == null) {
