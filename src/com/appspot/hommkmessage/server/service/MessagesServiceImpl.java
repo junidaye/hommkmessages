@@ -34,8 +34,8 @@ public class MessagesServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public void deleteMessage(String messageId, String userId) {
-		new RepositoryAccess("anypassword").deleteMessage(messageId, userId);
+	public void deleteMessage(String messageId, String password, String userId) {
+		new RepositoryAccess(password).deleteMessage(messageId, userId);
 	}
 
 }

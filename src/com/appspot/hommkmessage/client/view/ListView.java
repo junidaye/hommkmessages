@@ -157,7 +157,8 @@ public class ListView extends VerticalPanel {
 					return;
 				}
 				messagesService.deleteMessage(messageMetadata.getId(),
-						localStorage.getUserId(), new AsyncCallback<Void>() {
+						password, localStorage.getUserId(),
+						new AsyncCallback<Void>() {
 
 							@Override
 							public void onSuccess(Void result) {
