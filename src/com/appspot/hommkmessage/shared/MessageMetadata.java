@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.HTML;
 
 public class MessageMetadata implements Serializable {
 
-	private static final long serialVersionUID = 2806408406061969454L;
+	private static final long serialVersionUID = 2806408406061969453L;
 
 	private Date creationDate;
 	private String id;

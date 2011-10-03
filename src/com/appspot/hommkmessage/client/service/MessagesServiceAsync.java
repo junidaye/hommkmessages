@@ -26,7 +26,7 @@ public interface MessagesServiceAsync {
 	void getMessageMetadata(String searchString, String password,
 			String forUserId, AsyncCallback<List<MessageMetadata>> asyncCallback);
 
-	void deleteMessage(String messageId, String userId,
+	void deleteMessage(String messageId, String password, String userId,
 			AsyncCallback<Void> callback);
 
 }

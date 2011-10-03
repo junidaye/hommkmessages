@@ -28,5 +28,5 @@ public interface MessagesService extends RemoteService {
 	List<MessageMetadata> getMessageMetadata(String searchString,
 			String password, String forUserId);
 
-	void deleteMessage(String messageId, String userId);
+	void deleteMessage(String messageId, String password, String userId);
 }
