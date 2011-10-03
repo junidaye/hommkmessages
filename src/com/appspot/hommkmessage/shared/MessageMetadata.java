@@ -17,6 +17,7 @@
 package com.appspot.hommkmessage.shared;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -27,7 +28,7 @@ import com.google.gwt.user.client.ui.HTML;
 
 public class MessageMetadata implements Serializable {
 
-	private static final long serialVersionUID = 2806408406061969453L;
+	private static final long serialVersionUID = 2806408406061969454L;
 
 	private Date creationDate;
 	private String id;
@@ -37,6 +38,22 @@ public class MessageMetadata implements Serializable {
 	private String receiverText;
 	private String contentText;
 	private boolean allowedToBeDeleted;
+	private String userId;
+
+	public MessageMetadata() {
+	}
+
+	private MessageMetadata(MessageMetadata messageMetadata) {
+		creationDate = new Date(messageMetadata.creationDate.getTime());
+		id = messageMetadata.id;
+		messageType = messageMetadata.messageType;
+		subjectText = messageMetadata.subjectText;
+		messageDateText = messageMetadata.messageDateText;
+		receiverText = messageMetadata.receiverText;
+		contentText = messageMetadata.contentText;
+		allowedToBeDeleted = messageMetadata.allowedToBeDeleted;
+		userId = messageMetadata.userId;
+	}
 
 	public String getId() {
 		return id;
@@ -121,6 +138,31 @@ public class MessageMetadata implements Serializable {
 
 	private boolean matches(String text, String searchStringLowerCase) {
 		return text.toLowerCase().contains(searchStringLowerCase);
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public MessageMetadata getClientSafeCopy(String clientUserId) {
+		MessageMetadata copy = new MessageMetadata(this);
+		copy.setUserId(null);
+		copy.setAllowedToBeDeleted(clientUserId != null
+				&& clientUserId.equals(userId));
+		return copy;
+	}
+
+	public static List<MessageMetadata> makeClientSafe(
+			List<MessageMetadata> metadataList, String clientUserId) {
+		List<MessageMetadata> clientSafeList = new ArrayList<MessageMetadata>();
+		for (MessageMetadata messageMetadata : metadataList) {
+			clientSafeList.add(messageMetadata.getClientSafeCopy(clientUserId));
+		}
+		return clientSafeList;
 	}
 
 }

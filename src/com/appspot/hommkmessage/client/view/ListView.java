@@ -59,9 +59,7 @@ public class ListView extends VerticalPanel {
 		this.dateFormatter = dateFormatter;
 		this.localStorage = localStorage;
 		this.password = password;
-		this.userId = localStorage.getUserId(); // TODO PROBLEM!! die userid
-												// liegt unter der offiziellen
-												// hommk url
+		this.userId = localStorage.getUserId();
 	}
 
 	public void refresh() {

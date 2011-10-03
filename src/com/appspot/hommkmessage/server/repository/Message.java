@@ -121,7 +121,7 @@ public class Message {
 		return userId;
 	}
 
-	public MessageMetadata getMetadata(String forUserId) {
+	public MessageMetadata getMetadata() {
 		MessageMetadata messageMetadata = new MessageMetadata();
 		messageMetadata.setId(getId());
 		messageMetadata.setCreationDate(getCreationDate());
@@ -132,8 +132,7 @@ public class Message {
 		messageMetadata.setMessageDateText(dateText);
 		messageMetadata.setReceiverText(receiverText.getValue());
 		messageMetadata.setContentText(contentText.getValue());
-		messageMetadata.setAllowedToBeDeleted(this.userId != null
-				&& this.userId.equals(forUserId));
+		messageMetadata.setUserId(userId);
 		return messageMetadata;
 	}
 
