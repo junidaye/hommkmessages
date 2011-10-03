@@ -78,14 +78,12 @@ public class RepositoryAccess {
 		} else {
 			List<Message> messages = getMessages(searchString);
 			for (Message message : messages) {
-				MessageMetadata messageMetadata = message
-						.getMetadata(forUserId);
-				metadataList.add(messageMetadata);
+				metadataList.add(message.getMetadata());
 			}
 			cache.put(password, new ArrayList<MessageMetadata>(metadataList));
 		}
 		filter(metadataList, searchString);
-		return metadataList;
+		return MessageMetadata.makeClientSafe(metadataList, forUserId);
 	}
 
 	private List<Message> getMessages(String searchString) {
