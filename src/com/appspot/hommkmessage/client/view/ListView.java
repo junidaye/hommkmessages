@@ -64,6 +64,7 @@ public class ListView extends VerticalPanel {
 
 	public void refresh() {
 		clear();
+		add(new HTML("<p class=\"center\"><img src=\"images/roller.gif\"/></p>"));
 		messagesService.getMessageMetadata(getSearchString(), password, userId,
 				refreshCallback());
 	}
@@ -73,6 +74,7 @@ public class ListView extends VerticalPanel {
 
 			@Override
 			public void onSuccess(List<MessageMetadata> messageMetadataList) {
+				clear();
 				if (messageMetadataList.isEmpty()) {
 					add(new HTML("kein Ergebnis gefunden"));
 				}
@@ -85,6 +87,7 @@ public class ListView extends VerticalPanel {
 
 			@Override
 			public void onFailure(Throwable caught) {
+				clear();
 				HTML textBox = new HTML();
 				textBox.setText("Server error");
 				textBox.addStyleName("serverResponseError");
