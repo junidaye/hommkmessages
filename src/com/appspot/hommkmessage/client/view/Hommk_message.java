@@ -41,7 +41,14 @@ public class Hommk_message implements EntryPoint {
 
 	private void validateParameters(String password) {
 		if (password == null) {
-			throw new IllegalArgumentException("parameter key is not set");
+			String error = "parameter key is required";
+			RootPanel
+					.get("listViewContainer")
+					.getElement()
+					.setInnerHTML(
+							"<p class=\"serverResponseError\">" + error
+									+ "</p>");
+			throw new IllegalArgumentException(error);
 		}
 	}
 
