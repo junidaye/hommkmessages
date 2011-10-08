@@ -46,6 +46,7 @@ public class Hommk_message implements EntryPoint {
 	}
 
 	private ListView createListView(String password) {
+		RootPanel.get("listViewContainer").getElement().setInnerHTML("");
 		RootPanel.get("listViewContainer").add(
 				new HTML("<b>Nachrichten sortiert nach Upload-Datum:</b>"));
 

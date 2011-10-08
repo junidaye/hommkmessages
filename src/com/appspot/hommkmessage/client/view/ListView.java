@@ -53,6 +53,7 @@ public class ListView extends VerticalPanel {
 	private final LocalStorage localStorage;
 	private final String password;
 	private final String userId;
+	private final VerticalPanel throbberPanel;
 
 	public ListView(DateFormatter dateFormatter, LocalStorage localStorage,
 			String password) {
@@ -60,11 +61,22 @@ public class ListView extends VerticalPanel {
 		this.localStorage = localStorage;
 		this.password = password;
 		this.userId = localStorage.getUserId();
+
+		setWidth("100%");
+
+		throbberPanel = new VerticalPanel();
+		throbberPanel.setWidth("100%");
+		Image image = new Image("images/roller.gif");
+		throbberPanel.add(new HTML("<p></p>"));
+		throbberPanel.add(image);
+		throbberPanel.setCellHorizontalAlignment(image, ALIGN_CENTER);
 	}
 
 	public void refresh() {
 		clear();
-		add(new HTML("<p class=\"center\"><img src=\"images/roller.gif\"/></p>"));
+		throbberPanel.setVisible(true);
+		add(throbberPanel);
+
 		messagesService.getMessageMetadata(getSearchString(), password, userId,
 				refreshCallback());
 	}
@@ -74,7 +86,7 @@ public class ListView extends VerticalPanel {
 
 			@Override
 			public void onSuccess(List<MessageMetadata> messageMetadataList) {
-				clear();
+				throbberPanel.setVisible(false);
 				if (messageMetadataList.isEmpty()) {
 					add(new HTML("kein Ergebnis gefunden"));
 				}
@@ -87,7 +99,7 @@ public class ListView extends VerticalPanel {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				clear();
+				throbberPanel.setVisible(false);
 				HTML textBox = new HTML();
 				textBox.setText("Server error");
 				textBox.addStyleName("serverResponseError");
