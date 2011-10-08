@@ -35,8 +35,8 @@ public class SingleMessageServlet extends HttpServlet {
 
 		String messageId = req.getParameter("messageId");
 		String messageSource = getMessageSource(messageId, req.getLocale());
-		resp.setContentType("text/html");
-		resp.getWriter().append(messageSource);
+		resp.setContentType("text/html; charset=UTF-8");
+		resp.getWriter().print(messageSource);
 		resp.getWriter().close();
 	}
 
